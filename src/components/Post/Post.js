@@ -5,7 +5,7 @@ const query = graphql`
   {
     site {
       siteMetadata {
-        title
+        description
       }
     }
   }
@@ -16,7 +16,7 @@ const Post = () => {
   console.log(data);
   return (
     <>
-      <p>{data.site.siteMetadata.title}</p>
+      <p>{data.site.siteMetadata.description}</p>
     </>
   );
 };
