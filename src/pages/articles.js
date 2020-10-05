@@ -34,6 +34,7 @@ const ArticlesPage = ({ data }) => {
               excerpt={excerpt}
               fluid={featuredImage.childImageSharp.fluid}
               key={title}
+              slug={slug}
             />
           ),
         )}

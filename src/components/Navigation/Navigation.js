@@ -48,7 +48,7 @@ const Navigation = () => (
         <StyledNavLink to="/about">about</StyledNavLink>
       </NavigationListItem>
       <NavigationListItem>
-        <StyledNavLink to="gallery">gallery</StyledNavLink>
+        <StyledNavLink to="/gallery">gallery</StyledNavLink>
       </NavigationListItem>
       <NavigationListItem>
         <StyledNavLink to="/contact">contact</StyledNavLink>
