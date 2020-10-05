@@ -1,13 +1,63 @@
 import React from 'react';
 import { MDXRenderer } from 'gatsby-plugin-mdx';
+import { graphql } from 'gatsby';
+import Image from 'gatsby-image';
 
-const PostLayout = ({ pageContext: { post } }) => {
+export const query = graphql`
+  query queryCMSSingleArticle($id: String!) {
+    datoCmsArticle(id: { eq: $id }) {
+      title
+      featuredimage {
+        fixed(width: 500) {
+          ...GatsbyDatoCmsFixed_tracedSVG
+        }
+      }
+      articlecontent {
+        ... on DatoCmsPragraph {
+          paragraphContent
+          id
+        }
+        ... on DatoCmsHeading {
+          headingContent
+          id
+        }
+        ... on DatoCmsArticleImage {
+          imageData {
+            fixed(width: 500) {
+              ...GatsbyDatoCmsFixed_tracedSVG
+            }
+          }
+          id
+        }
+      }
+    }
+  }
+`;
+
+const PostLayout = ({ data }) => {
+  console.log(data);
   return (
     <div>
-      <h1>{post.frontmatter.title}</h1>
-      <p>{post.frontmatter.author}</p>
-      <img src={post.frontmatter.featuredImage.childImageSharp.fluid.src} />
-      <MDXRenderer>{post.body}</MDXRenderer>
+      <h1>{data.datoCmsArticle.title}</h1>
+      <p>{data.datoCmsArticle.author}</p>
+      <Image fixed={data.datoCmsArticle.featuredimage.fixed} />
+      <div>
+        {data.datoCmsArticle.articlecontent.map(item => {
+          const itemKey = Object.keys(item)[1];
+          console.log(itemKey);
+
+          switch (itemKey) {
+            case 'paragraphContent':
+              return <p key={item.id}>{item[itemKey]}</p>;
+            case 'headingContent':
+              return <h2 key={item.id}>{item[itemKey]}</h2>;
+            case 'imageData':
+              return <Image key={item.id} fixed={item[itemKey].fixed} />;
+            default:
+              return null;
+          }
+        })}
+      </div>
     </div>
   );
 };

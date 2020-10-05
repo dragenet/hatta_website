@@ -1,43 +1,31 @@
 const path = require(`path`);
+const slugify = require('slugify');
 
 exports.createPages = async ({ graphql, actions }) => {
   const { createPage } = actions;
   const blogPostTemplate = path.resolve(`src/layouts/post.js`);
-  const result = await graphql(
-    `
-      query QueryArticles {
-        allMdx {
-          nodes {
-            frontmatter {
-              title
-              slug
-              author
-              featuredImage {
-                childImageSharp {
-                  fluid(maxWidth: 700, maxHeight: 500) {
-                    src
-                  }
-                }
-              }
-            }
-            body
-          }
+
+  const result = await graphql(`
+    query queryCMSPage {
+      allDatoCmsArticle {
+        nodes {
+          id
+          title
         }
       }
-    `,
-    { limit: 1000 },
-  );
-
-  console.log(result.data.allMdx.nodes);
+    }
+  `);
 
   // Create blog post pages.
-  result.data.allMdx.nodes.forEach(post => {
+  result.data.allDatoCmsArticle.nodes.forEach(post => {
+    const slugifiedTitle = slugify(post.title, { lower: true });
+    console.log(slugifiedTitle);
     createPage({
       // Path for this page — required
-      path: `articles/${post.frontmatter.slug}`,
+      path: `articles/${slugifiedTitle}`,
       component: blogPostTemplate,
       context: {
-        post,
+        id: post.id,
       },
     });
   });

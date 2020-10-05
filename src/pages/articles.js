@@ -3,6 +3,7 @@ import styled from 'styled-components';
 import { graphql } from 'gatsby';
 import ArticlePreview from '../components/ArticlePreview/ArticlePreview';
 import PageInfo from '../components/PageInfo/PageInfo';
+import slugify from 'slugify';
 
 const ArticlesWrapper = styled.div`
   display: grid;
@@ -16,28 +17,23 @@ const pageData = {
 };
 
 const ArticlesPage = ({ data }) => {
-  const {
-    allMdx: { nodes },
-  } = data;
+  console.log(data);
 
+  const {
+    allDatoCmsArticle: { nodes },
+  } = data;
   return (
     <>
       <PageInfo title={pageData.title} paragraph={pageData.paragraph} />
       <ArticlesWrapper>
-        {nodes.map(
-          ({
-            excerpt,
-            frontmatter: { title, slug, author, featuredImage },
-          }) => (
-            <ArticlePreview
-              title={title}
-              excerpt={excerpt}
-              fluid={featuredImage.childImageSharp.fluid}
-              key={title}
-              slug={slug}
-            />
-          ),
-        )}
+        {nodes.map(({ id, title, featuredimage }) => (
+          <ArticlePreview
+            title={title}
+            fluid={featuredimage.fluid}
+            key={id}
+            slug={slugify(title, { lower: true })}
+          />
+        ))}
       </ArticlesWrapper>
     </>
   );
@@ -45,21 +41,16 @@ const ArticlesPage = ({ data }) => {
 
 export const query = graphql`
   {
-    allMdx {
+    allDatoCmsArticle {
       nodes {
-        frontmatter {
-          title
-          slug
-          author
-          featuredImage {
-            childImageSharp {
-              fluid(maxWidth: 700, maxHeight: 500) {
-                ...GatsbyImageSharpFluid_tracedSVG
-              }
-            }
+        id
+        title
+        author
+        featuredimage {
+          fluid {
+            ...GatsbyDatoCmsFluid_tracedSVG
           }
         }
-        excerpt(pruneLength: 50)
       }
     }
   }
