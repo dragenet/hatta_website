@@ -1,5 +1,4 @@
 import React from 'react';
-import { MDXRenderer } from 'gatsby-plugin-mdx';
 import { graphql } from 'gatsby';
 import Image from 'gatsby-image';
 
@@ -35,7 +34,6 @@ export const query = graphql`
 `;
 
 const PostLayout = ({ data }) => {
-  console.log(data);
   return (
     <div>
       <h1>{data.datoCmsArticle.title}</h1>
@@ -44,7 +42,6 @@ const PostLayout = ({ data }) => {
       <div>
         {data.datoCmsArticle.articlecontent.map(item => {
           const itemKey = Object.keys(item)[1];
-          console.log(itemKey);
 
           switch (itemKey) {
             case 'paragraphContent':

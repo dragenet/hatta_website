@@ -7,7 +7,6 @@ module.exports = {
     author: `@gatsbyjs`,
   },
   plugins: [
-    'gatsby-plugin-mdx',
     'gatsby-plugin-styled-components',
     `gatsby-plugin-layout`,
     `gatsby-plugin-react-helmet`,
@@ -24,13 +23,6 @@ module.exports = {
         // You can find your read-only API token under the Settings > API tokens
         // section of your administrative area:
         apiToken: process.env.API_DATO_CMS,
-      },
-    },
-    {
-      resolve: `gatsby-source-filesystem`,
-      options: {
-        name: `articles`,
-        path: `${__dirname}/src/data/articles`,
       },
     },
     `gatsby-transformer-sharp`,
